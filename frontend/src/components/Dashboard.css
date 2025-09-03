@@ -144,7 +144,7 @@ body {
 
 select {
   appearance: none;
-  background-color: #1db954; /* Spotify green */
+  background-color: #1db954;
   color: white;
   padding: 2px 3px;
   border: none;

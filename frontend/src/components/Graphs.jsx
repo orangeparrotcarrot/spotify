@@ -27,8 +27,8 @@ const Graphs = ({ data }) => {
 
   return (
     <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-  <Bar data={chartData} options={options} />
-</div>
+      <Bar data={chartData} options={options} />
+    </div>
 
   );
 };

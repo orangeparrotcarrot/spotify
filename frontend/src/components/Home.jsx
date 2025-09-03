@@ -5,11 +5,11 @@ function Home() {
     const clientId = 'ae39e7ed24bb4d69b3adac06305c8e6a';
     const redirectUri = 'http://127.0.0.1:5173/callback'; // Match your frontend port
     const scopes = [
-  'user-read-recently-played',
-  'user-read-private',
-  'playlist-read-private',
-  'user-top-read'
-];
+      'user-read-recently-played',
+      'user-read-private',
+      'playlist-read-private',
+      'user-top-read'
+    ];
     const authEndpoint = 'https://accounts.spotify.com/authorize';
 
     const authUrl = `${authEndpoint}?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(
