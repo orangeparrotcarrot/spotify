@@ -1,0 +1,117 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* Full-screen dashboard container */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+/* Navigation bar */
+nav {
+  display: flex;
+  gap: 2rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #0073e6;
+  font-weight: 500;
+}
+
+/* Header section */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: #1DB954;
+}
+
+.dashboard-header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+/* Tracks section */
+section {
+  margin-bottom: 2rem;
+}
+
+section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.empty-message {
+  color: #666;
+}
+
+/* Track grid layout */
+.track-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.track-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.track-card img {
+  width: 64px;
+  height: 64px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.track-info {
+  flex: 1;
+}
+
+.track-info .album-name {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* List styling */
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  padding: 4px 0;
+}
