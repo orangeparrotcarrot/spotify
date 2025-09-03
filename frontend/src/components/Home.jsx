@@ -21,7 +21,7 @@ function Home() {
 
   return (
     <div style={{ textAlign: 'center', padding: '4rem' }}>
-      <h1>🎶 Welcome to Your Spotify Companion</h1>
+      <h1>Welcome to Your Spotify Companion</h1>
       <p>Log in to explore your music profile, top tracks, and more.</p>
       <button
         onClick={handleLogin}

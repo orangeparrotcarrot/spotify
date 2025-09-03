@@ -53,6 +53,8 @@ body {
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
+  /* display:flex; */
+  flex-direction: row;
 }
 
 /* Profile */
@@ -120,4 +122,16 @@ body {
 .album-name {
   font-size: 0.8rem;
   color: #888;
+}
+
+.tracks {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.tracks section {
+  flex: 1;
+  max-width: 50%;
 }
