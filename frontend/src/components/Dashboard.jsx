@@ -19,7 +19,6 @@ const Dashboard = () => {
   const [profile, setProfile] = useState(null);
   const accessToken = localStorage.getItem('access_token');
 
-  // Fetch user profile
   useEffect(() => {
     if (!accessToken) return;
     fetch('https://api.spotify.com/v1/me', {
@@ -45,12 +44,7 @@ const Dashboard = () => {
             />
             <h1>Welcome, {profile.display_name}</h1>
           </header>
-        )}
-
-      {/* <div className="tracks">
-        <TopTracks />
-      </div> */}
-      
+        )}      
         
       </main>
     </div>

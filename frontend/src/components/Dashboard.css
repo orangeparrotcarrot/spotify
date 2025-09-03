@@ -139,5 +139,33 @@ body {
 
 .tracks section {
   flex: 1;
-  max-width: 50%;
+  max-width: 90%;
+}
+
+select {
+  appearance: none;
+  background-color: #1db954; /* Spotify green */
+  color: white;
+  padding: 2px 3px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+select:hover {
+  background-color: #17a44c;
+}
+
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.5);
+}
+
+option {
+  background-color: white;
+  color: black;
 }

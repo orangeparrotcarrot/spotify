@@ -6,6 +6,7 @@ import Error from './components/Error';
 import ToDo from './components/ToDo';
 import RecentlyPlayed from './components/RecentlyPlayed';
 import TopTracks from './components/TopTracks';
+import TopArtists from './components/TopArtists';
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/error" element={<Error />} />
         <Route path="/todo" element={<ToDo />} />
         <Route path="/recentlyPlayed" element={<RecentlyPlayed />} />
-        <Route path="topTracks" element={<TopTracks />} />
+        <Route path="/topTracks" element={<TopTracks />} />
+        <Route path="/topArtists" element={<TopArtists />} />
       </Routes>
     </Router>
   );
