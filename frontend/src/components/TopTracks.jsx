@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import './Dashboard.css'
+import TrackGrid from "./TrackGrid";
+import SideBar from "./SideBar";
 
 const TopTracks = () => {
     const [topTracks, setTopTracks] = useState([]);
@@ -18,10 +20,18 @@ const TopTracks = () => {
       }, [accessToken, time, itemNumber]);
 
       return (
-        <section>
-          <div className="tracksHeader">
-            <h2 className="section-title">Top Tracks</h2>
-            <label>
+        <div className="dashboard">
+          <SideBar />
+
+          <main className="main-content">
+              <header className="profile-header">
+                <h1>Your top tracks</h1>
+              </header>
+            <div className="tracks">
+            <section>
+              <div className="tracksHeader">
+                <h2 className="section-title">Top tracks</h2>
+<label>
               Time frame:
               <select defaultValue={time} onChange={e => setTime(e.target.value)}>
             <option value="short_term">Last month</option>
@@ -29,30 +39,22 @@ const TopTracks = () => {
             <option value="long_term">Last 12 months</option>
           </select>
             </label>
-          <label>
-            Items displayed:
-          <select defaultValue={itemNumber} onChange={e => setItemNumber(e.target.value)}>
-            <option value="6">6</option>
-            <option value="15">15</option>
-            <option value="24">24</option>
-            <option value="30">30</option>
-          </select>
-          </label>
-          </div>
-
-          <div className="track-grid">
-            {topTracks.map(track => (
-              <div className="track-card" key={track.id}>
-                <img src={track.album.images[0]?.url} alt={track.name} />
-                <div className="track-info">
-                  <strong>{track.name}</strong>
-                  <p>{track.artists.map(a => a.name).join(', ')}</p>
-                  <span className="album-name">{track.album.name}</span>
-                </div>
+                <label>
+                Items displayed:
+              <select defaultValue={itemNumber} onChange={e => setItemNumber(e.target.value)}>
+                <option value="9">9</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+              </select>
+              </label>
               </div>
-            ))}
-          </div>
-        </section>
+
+              <TrackGrid tracks={topTracks} />
+            </section>
+            </div>
+          </main>
+          
+        </div>
       )
 }
 

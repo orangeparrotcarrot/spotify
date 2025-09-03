@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, request
+import requests
+import base64
 from flask_cors import CORS
 import os
 from spotipy.oauth2 import SpotifyOAuth
@@ -24,7 +26,22 @@ def get_token():
     token_info = sp_oauth.get_access_token(code)
     return jsonify(token_info)
     
+@app.route('/refresh_token', methods=['POST'])
+def refresh_token():
+    refresh_token = request.json.get('refresh_token')
+    
+    response = requests.post('https://accounts.spotify.com/api/token', data={
+        'grant_type': 'refresh_token',
+        'refresh_token': refresh_token,
+    }, headers={
+        'Authorization': f'Basic {base64.b64encode(f"{CLIENT_ID}:{CLIENT_SECRET}".encode()).decode()}',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    })
 
+    if response.status_code == 200:
+        return jsonify(response.json())
+    else:
+        return jsonify({'error': 'Failed to refresh token'}), response.status_code
 
 if __name__ == '__main__':
     app.run(debug=True)

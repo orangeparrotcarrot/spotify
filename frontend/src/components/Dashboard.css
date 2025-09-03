@@ -54,7 +54,7 @@ body {
   padding: 2rem;
   overflow-y: auto;
   /* display:flex; */
-  flex-direction: row;
+  /* flex-direction: row; */
 }
 
 .tracksHeader{

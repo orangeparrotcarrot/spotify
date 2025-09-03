@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import SideBar from './SideBar';
 import TopTracks from './TopTracks';
-import RecentlyPlayed from './RecentlyPlayed';
+// import RecentlyPlayed from './RecentlyPlayed';
 import './Dashboard.css';
+
+// useEffect(() => {
+//   const interval = setInterval(() => {
+//     const expiresAt = parseInt(localStorage.getItem('expires_in'), 10);
+//     if (Date.now() > expiresAt - 300000) { // 5 minutes before expiry
+//       refreshAccessToken();
+//     }
+//   }, 60000); // check every minute
+
+//   return () => clearInterval(interval);
+// }, []);
 
 const Dashboard = () => {
   const [profile, setProfile] = useState(null);
@@ -36,10 +47,9 @@ const Dashboard = () => {
           </header>
         )}
 
-      <div className="tracks">
-        <RecentlyPlayed />
+      {/* <div className="tracks">
         <TopTracks />
-      </div>
+      </div> */}
       
         
       </main>

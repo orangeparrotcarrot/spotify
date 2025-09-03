@@ -4,7 +4,8 @@ const ToDo = () => {
 
     const toDoList = [
         "Learn more about songs",
-        "Give different time spans - DONE"
+        "Give different time spans - DONE",
+        "Add refresh token"
     ]
     const listItems = toDoList.map(item => <li>{item}</li>)
     return (

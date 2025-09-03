@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import './Dashboard.css'
+import SideBar from "./SideBar";
+import TrackGrid from "./TrackGrid";
 
 const RecentlyPlayed = () => {
     const [recentlyPlayed, setRecentlyPlayed] = useState([]);
@@ -17,34 +19,34 @@ const RecentlyPlayed = () => {
   }, [accessToken, itemNumber]);
 
       return (
-        <section>
-          <div className="tracksHeader">
-            <h2 className="section-title">Recently Played</h2>
+        <div className="dashboard">
+          <SideBar />
 
-            <label>
-            Items displayed:
-          <select defaultValue={itemNumber} onChange={e => setItemNumber(e.target.value)}>
-            <option value="6">6</option>
-            <option value="15">15</option>
-            <option value="24">24</option>
-            <option value="30">30</option>
-          </select>
-          </label>
-          </div>
+          <main className="main-content">
+              <header className="profile-header">
+                <h1>Your recently played tracks</h1>
+              </header>
+            <div className="tracks">
+            <section>
+              <div className="tracksHeader">
+                <h2 className="section-title">Recently Played</h2>
 
-          <div className="track-grid">
-            {recentlyPlayed.map(({ track }, i) => (
-              <div className="track-card" key={i}>
-                <img src={track.album.images[0]?.url} alt={track.name} />
-                <div className="track-info">
-                  <strong>{track.name}</strong>
-                  <p>{track.artists.map(a => a.name).join(', ')}</p>
-                  <span className="album-name">{track.album.name}</span>
-                </div>
+                <label>
+                Items displayed:
+              <select defaultValue={itemNumber} onChange={e => setItemNumber(e.target.value)}>
+                <option value="9">9</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+              </select>
+              </label>
               </div>
-            ))}
-          </div>
-        </section>
+
+              <TrackGrid tracks={recentlyPlayed} />
+            </section>
+            </div>
+          </main>
+          
+        </div>
       )
 }
 

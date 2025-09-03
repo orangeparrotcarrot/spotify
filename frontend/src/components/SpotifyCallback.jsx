@@ -15,10 +15,11 @@ function SpotifyCallback() {
       })
         .then(res => res.json())
         .then(data => {
-          // Store token if needed
           localStorage.setItem('access_token', data.access_token);
-          // Redirect to desired page
-          navigate('/dashboard'); // Change this to your target route
+          localStorage.setItem('refresh_token', data.refresh_token)
+          localStorage.setItem('expires_in', Date.now() + data.expires_in * 1000)
+          
+          navigate('/dashboard'); 
         })
         .catch(err => {
           console.error('Token exchange failed:', err);
