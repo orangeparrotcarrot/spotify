@@ -57,6 +57,12 @@ body {
   flex-direction: row;
 }
 
+.tracksHeader{
+  display: flex;
+  justify-content: space-between;
+}
+
+
 /* Profile */
 .profile-header {
   display: flex;
