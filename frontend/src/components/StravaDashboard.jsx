@@ -5,8 +5,22 @@ const StravaDashboard = () => {
   const [profile, setProfile] = useState(null);
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
 
   const accessToken = localStorage.getItem("strava_access_token");
+
+  const onClickActivity = (track) => {
+    if (!track) return;
+    // add duration
+    setSelectedActivity(track);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedActivity(null);
+  };
 
   useEffect(() => {
     if (!accessToken) {
@@ -22,14 +36,14 @@ const StravaDashboard = () => {
         });
         const profileData = await profileRes.json();
 
-        const activitiesRes = await fetch("https://www.strava.com/api/v3/athlete/activities?per_page=5", {
+        const activitiesRes = await fetch("https://www.strava.com/api/v3/athlete/activities?per_page=15", {
           headers: { Authorization: `Bearer ${accessToken}` }
         });
         const activitiesData = await activitiesRes.json();
-        console.log(activities)
 
         setProfile(profileData);
         setActivities(Array.isArray(activitiesData) ? activitiesData : []);
+        console.log(activitiesData)
       } catch (error) {
         console.error("Error fetching Strava data:", error);
       } finally {
@@ -57,38 +71,61 @@ const StravaDashboard = () => {
     );
   }
 
+
   return (
     <div className="dashboard">
       <SideBar />
 
-      <div className="dashboard-header">
-        <img src={profile.profile} alt="Profile" />
-        <h1>{profile.firstname} {profile.lastname}</h1>
-      </div>
+      <main className="main-content">
+        <header className="profile-header">
+          <h1>Your recent activities</h1>
+        </header>
 
-      <section>
-        <h2>Recent Activities</h2>
-        {activities.length === 0 ? (
-          <p className="empty-message">No recent activities found.</p>
-        ) : (
-          <div className="track-grid">
-            {activities.map((activity) => (
-              <div className="track-card" key={activity.id}>
-                <img
-                  src="https://static.thenounproject.com/png/104062-200.png"
-                  alt="Activity"
-                />
-                <div className="track-info">
-                  <strong>{activity.name}</strong>
-                  <div className="album-name">
-                    {Math.round(activity.distance / 1000)} km · {Math.round(activity.moving_time / 60)} min
+        <div className="tracks">
+          <section>
+            <div className="tracksHeader">
+              <h2 className="section-title">Recent Activities</h2>
+              <div className="track-grid">
+                {activities.map((item, i) => {
+                  const track = item.track || item;
+                  return (
+                    <div
+                      className="track-card"
+                      key={track.id || i}
+                      onClick={() => onClickActivity(track)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <img src={"https://static.thenounproject.com/png/104062-200.png"} alt="Activity" />
+                      <div className="track-info">
+                        <strong>{track.name}</strong>
+                        <p>{(track.distance / 1000).toFixed(2)} km · {Math.round(track.moving_time / 60)} min</p>
+                        <span className="album-name">{Math.floor((1000/track.average_speed) / 60)}:{(Math.round(1000/track.average_speed) % 60)} min/km</span>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {showModal && selectedActivity && (
+                  <div className="modal-overlay">
+                    <div className="modal-content">
+                      <button className="close-btn" onClick={closeModal}>X</button>
+                      <h2>{selectedActivity.name}</h2>
+                      <p><strong>Distance:</strong>{(selectedActivity.distance / 1000).toFixed(2)} km</p>
+                      <p><strong>Time:</strong>{Math.round(selectedActivity.moving_time / 60)} min</p>
+                      <p><strong>Pace:</strong> {Math.floor((1000/selectedActivity.average_speed) / 60)}:{(Math.round(1000/selectedActivity.average_speed) % 60)} min/km</p>
+                      <p><strong>Start time:</strong> {selectedActivity.start_dae_local}</p>
+                      <p><strong>Finish time:</strong>{selectedActivity.elapsed_time}</p>
+                      {selectedActivity.preview_url && (
+                        <audio controls src={selectedActivity.preview_url} />
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
-      </section>
+            </div>
+          </section>
+        </div>
+      </main>
     </div>
   );
 };
