@@ -3,7 +3,6 @@ import './Dashboard.css'
 const ToDo = () => {
 
   const toDoList = [
-    "Learn more about songs",
     "Add refresh token",
     "Access Token out of local storage",
     "Add duration to songs",
@@ -14,7 +13,8 @@ const ToDo = () => {
   const done = [
     "Give different time spans",
     "Top Artists",
-    "eslint"
+    "eslint",
+    "Learn more about songs"
   ]
   const listItems = toDoList.map(item => <li>{item}</li>)
   const doneItems = done.map(item => <li>{item}</li>)

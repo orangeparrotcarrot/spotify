@@ -8,6 +8,7 @@ const SideBar = () => {
         <a href="/recentlyPlayed">Recently Played</a>
         <a href="/topArtists">Top Artists</a>
         <a href="/todo">To Do List</a>
+        <a href="/strava">Strava</a>
       </nav>
     </aside>
   )
