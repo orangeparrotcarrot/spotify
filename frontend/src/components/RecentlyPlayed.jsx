@@ -10,12 +10,19 @@ const RecentlyPlayed = () => {
 
   useEffect(() => {
     if (!accessToken || !itemNumber) return;
-    fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=${itemNumber}`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    })
-      .then(res => res.json())
-      .then(data => setRecentlyPlayed(data.items || []))
-      .catch(err => console.error('Error fetching recent tracks:', err));
+
+    const fetchData = async () => {
+      try {
+        const trackReq = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=${itemNumber}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        const trackData = await trackReq.json()
+        setRecentlyPlayed(trackData.items || [])
+      } catch (error) {
+        console.error("Error fetching recent tracks:", error)
+      }
+    }
+    fetchData()
   }, [accessToken, itemNumber]);
 
   return (

@@ -74,11 +74,11 @@ section h2 {
 }
 
 /* Track grid layout */
-.track-grid {
+/* .track-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
-}
+} */
 
 .track-card {
   background-color: #fff;

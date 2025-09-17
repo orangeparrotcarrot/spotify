@@ -83,7 +83,6 @@ body {
   margin-bottom: 1rem;
 }
 
-/* Track Grid */
 .track-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -131,9 +130,10 @@ body {
 }
 
 .tracks {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  /* display: flex;
+  flex-direction: row; */
+  /* justify-content: space-between; */
+  display: block;
   gap: 2rem;
 }
 

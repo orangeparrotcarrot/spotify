@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import SideBar from "./SideBar";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import polyline from "@mapbox/polyline";
+import "./tracks.css"
+import './Dashboard.css'
 
 const StravaDashboard = () => {
   const [profile, setProfile] = useState(null);
@@ -7,13 +12,56 @@ const StravaDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
+  const [startTime, setStartTime] = useState(0);
+  const [finishTime, setFinishTime] = useState(0)
 
   const accessToken = localStorage.getItem("strava_access_token");
+  useEffect(() => {
+    if (!selectedActivity || !selectedActivity.map?.summary_polyline) return;
+
+    const decoded = polyline.decode(selectedActivity.map.summary_polyline);
+    const latLngs = decoded.map(([lat, lng]) => L.latLng(lat, lng));
+
+    const map = L.map("activity-map").setView(latLngs[0], 13);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {attribution: '&copy; <a href="https://carto.com/">CARTO</a>',}).addTo(map);
+
+    L.polyline(latLngs, { color: "orange", weight: 4 }).addTo(map);
+
+    return () => {
+      map.remove();
+    };
+  }, [selectedActivity]);
 
   const onClickActivity = (track) => {
     if (!track) return;
-    // add duration
     setSelectedActivity(track);
+    const initialStartTime = track.start_date_local;
+    let time = initialStartTime.split("T")[1].slice(0,-1)
+    const elapsed_mins = Math.round(track.elapsed_time / 60);
+    const elapsed_secs = track.elapsed_time % 60
+    const split_time = time.split(":")
+    let finish_hours = parseInt(split_time[0])
+    let finish_minutes = elapsed_mins + parseInt(split_time[1])
+    let finish_secs = elapsed_secs + parseInt(split_time[2])
+    if (finish_secs > 59) {
+      finish_minutes +=1
+      finish_secs -= 60
+    } 
+    if (finish_minutes > 59) {
+      finish_hours +=1;
+      finish_minutes -= 60;
+    }
+    if (finish_secs < 10){
+      finish_secs = "0" + finish_secs
+    }
+    if (finish_minutes < 10) {
+      finish_minutes = "0" + finish_minutes
+    }
+    if (finish_hours < 10) {
+      finish_hours = "0" + finish_hours
+    }
+    setStartTime(time);
+    setFinishTime(finish_hours+":"+finish_minutes+":"+finish_secs);
     setShowModal(true);
   };
 
@@ -40,10 +88,8 @@ const StravaDashboard = () => {
           headers: { Authorization: `Bearer ${accessToken}` }
         });
         const activitiesData = await activitiesRes.json();
-
         setProfile(profileData);
         setActivities(Array.isArray(activitiesData) ? activitiesData : []);
-        console.log(activitiesData)
       } catch (error) {
         console.error("Error fetching Strava data:", error);
       } finally {
@@ -70,8 +116,6 @@ const StravaDashboard = () => {
       </div>
     );
   }
-
-
   return (
     <div className="dashboard">
       <SideBar />
@@ -80,54 +124,49 @@ const StravaDashboard = () => {
         <header className="profile-header">
           <h1>Your recent activities</h1>
         </header>
-
         <div className="tracks">
           <section>
             <div className="tracksHeader">
               <h2 className="section-title">Recent Activities</h2>
-              <div className="track-grid">
-                {activities.map((item, i) => {
-                  const track = item.track || item;
-                  return (
-                    <div
-                      className="track-card"
-                      key={track.id || i}
-                      onClick={() => onClickActivity(track)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <img src={"https://static.thenounproject.com/png/104062-200.png"} alt="Activity" />
-                      <div className="track-info">
-                        <strong>{track.name}</strong>
-                        <p>{(track.distance / 1000).toFixed(2)} km · {Math.round(track.moving_time / 60)} min</p>
-                        <span className="album-name">{Math.floor((1000/track.average_speed) / 60)}:{(Math.round(1000/track.average_speed) % 60)} min/km</span>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {showModal && selectedActivity && (
-                  <div className="modal-overlay">
-                    <div className="modal-content">
-                      <button className="close-btn" onClick={closeModal}>X</button>
-                      <h2>{selectedActivity.name}</h2>
-                      <p><strong>Distance:</strong>{(selectedActivity.distance / 1000).toFixed(2)} km</p>
-                      <p><strong>Time:</strong>{Math.round(selectedActivity.moving_time / 60)} min</p>
-                      <p><strong>Pace:</strong> {Math.floor((1000/selectedActivity.average_speed) / 60)}:{(Math.round(1000/selectedActivity.average_speed) % 60)} min/km</p>
-                      <p><strong>Start time:</strong> {selectedActivity.start_dae_local}</p>
-                      <p><strong>Finish time:</strong>{selectedActivity.elapsed_time}</p>
-                      {selectedActivity.preview_url && (
-                        <audio controls src={selectedActivity.preview_url} />
-                      )}
-                    </div>
+            </div>
+            <div className="track-grid">
+              {activities.map(artist => (
+                <div className="track-card" key={artist.id} onClick={() => onClickActivity(artist)} style={{ cursor: 'pointer' }}>
+                  <img src={"https://static.thenounproject.com/png/104062-200.png"} alt="Activity" />
+                  <div className="track-info">
+                    <strong>{artist.name}</strong>
+                    <p>{(artist.distance / 1000).toFixed(2)} km · {Math.round(artist.moving_time / 60)} min</p>
+                    <span className="album-name">{Math.floor((1000/artist.average_speed) / 60)}:{(Math.round(1000/artist.average_speed) % 60)} min/km</span>
                   </div>
-                )}
-              </div>
+                </div>
+              ))}
+
+              {showModal && selectedActivity && (
+                <div className="modal-overlay">
+                  <div className="modal-content">
+                    <button className="close-btn" onClick={closeModal}>X</button>
+                    <h2>{selectedActivity.name}</h2>
+                    <p><strong>Distance: </strong>{(selectedActivity.distance / 1000).toFixed(2)} km</p>
+                    <p><strong>Moving time: </strong>{Math.round(selectedActivity.moving_time / 60)} min</p>
+                    {selectedActivity.type === "Run" && (
+                      <p><strong>Pace: </strong> {Math.floor((1000/selectedActivity.average_speed) / 60)}:{(Math.round(1000/selectedActivity.average_speed) % 60)} min/km</p>
+                    )}
+                    <p><strong>Start time:</strong> {startTime}</p>
+                    <p><strong>Finish time: </strong>{finishTime}</p>
+                    {selectedActivity.type === "Run" && (
+                      <div id="activity-map"
+                        style={{ height: "300px", width: "100%", marginTop: "1rem" }}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </section>
         </div>
-      </main>
+      </main>      
     </div>
-  );
+  )
 };
 
 export default StravaDashboard;

@@ -10,7 +10,6 @@ function TrackGrid({ tracks }) {
 
   const onClickTrack = (track) => {
     if (!track) return;
-    console.log(track)
     // add duration
     setSelectedTrack(track);
     setShowModal(true);
