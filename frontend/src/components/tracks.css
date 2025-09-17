@@ -29,3 +29,21 @@
   border-radius: 8px;
   margin-bottom: 1rem;
 }
+
+.tab-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tab-buttons button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.tab-buttons button.active {
+  background-color: #ccc;
+  font-weight: bold;
+}

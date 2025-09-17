@@ -14,6 +14,7 @@ const StravaDashboard = () => {
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [startTime, setStartTime] = useState(0);
   const [finishTime, setFinishTime] = useState(0)
+  const [activeTab, setActiveTab] = useState("stats");
 
   const accessToken = localStorage.getItem("strava_access_token");
   useEffect(() => {
@@ -146,16 +147,45 @@ const StravaDashboard = () => {
                   <div className="modal-content">
                     <button className="close-btn" onClick={closeModal}>X</button>
                     <h2>{selectedActivity.name}</h2>
-                    <p><strong>Distance: </strong>{(selectedActivity.distance / 1000).toFixed(2)} km</p>
-                    <p><strong>Moving time: </strong>{Math.round(selectedActivity.moving_time / 60)} min</p>
-                    {selectedActivity.type === "Run" && (
-                      <p><strong>Pace: </strong> {Math.floor((1000/selectedActivity.average_speed) / 60)}:{(Math.round(1000/selectedActivity.average_speed) % 60)} min/km</p>
+                    <div className="tab-buttons">
+                      <button 
+                        className={activeTab === "stats" ? "active" : ""} 
+                        onClick={() => setActiveTab("stats")}
+                      >
+                        Stats
+                      </button>
+                      <button 
+                        className={activeTab === "music" ? "active" : ""} 
+                        onClick={() => setActiveTab("music")}
+                      >
+                        Music
+                      </button>
+                    </div>
+                    {activeTab === "stats" && (
+                      <><p><strong>Distance: </strong>{(selectedActivity.distance / 1000).toFixed(2)} km</p>
+                        <p><strong>Moving time: </strong>{Math.round(selectedActivity.moving_time / 60)} min</p>
+                        {selectedActivity.type === "Run" && (
+                          <p><strong>Pace: </strong> {Math.floor((1000/selectedActivity.average_speed) / 60)}:{(Math.round(1000/selectedActivity.average_speed) % 60)} min/km</p>
+                        )}
+                        <p><strong>Start time:</strong> {startTime}</p>
+                        <p><strong>Finish time: </strong>{finishTime}</p>
+                      </>
                     )}
-                    <p><strong>Start time:</strong> {startTime}</p>
-                    <p><strong>Finish time: </strong>{finishTime}</p>
+                    {activeTab === "music" && (
+                      <div className="music-tab">
+                        <p><strong>Tracks you listened to:</strong></p>
+                        <p>No information yet</p>
+                      </div>
+                    )}
                     {selectedActivity.type === "Run" && (
-                      <div id="activity-map"
-                        style={{ height: "300px", width: "100%", marginTop: "1rem" }}
+                      <div
+                        id="activity-map"
+                        style={{
+                          height: "300px",
+                          width: "100%",
+                          marginTop: "1rem",
+                          display: activeTab === "stats" ? "block" : "none"
+                        }}
                       />
                     )}
                   </div>
