@@ -5,12 +5,12 @@ const ToDo = () => {
   const toDoList = [
     "Add refresh token",
     "Access Token out of local storage",
-    "Add duration to songs",
     "Dashboard",
     "Fix the selects",
   ]
 
   const done = [
+    "Add duration to songs",
     "Give different time spans",
     "Top Artists",
     "eslint",

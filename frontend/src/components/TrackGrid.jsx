@@ -4,6 +4,7 @@ import "./tracks.css";
 function TrackGrid({ tracks }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [length, setLength] = useState("")
 
   const accessToken = localStorage.getItem('access_token');
   if (!accessToken) return <p>Missing Access Token</p>;
@@ -11,6 +12,10 @@ function TrackGrid({ tracks }) {
   const onClickTrack = (track) => {
     if (!track) return;
     // add duration
+    let secs = track.duration_ms / 1000
+    let mins = Math.floor(secs/60)
+    secs = Math.round(secs % 60)
+    setLength(mins+":"+secs)
     setSelectedTrack(track);
     setShowModal(true);
   };
@@ -50,6 +55,7 @@ function TrackGrid({ tracks }) {
             <p><strong>Artists:</strong> {selectedTrack.artists.map(a => a.name).join(', ')}</p>
             <p><strong>Album:</strong> {selectedTrack.album.name}</p>
             <p><strong>Release Date:</strong> {selectedTrack.album.release_date}</p>
+            <p><strong>Duration: </strong>{length}</p>
             <p><strong>Popularity:</strong> {selectedTrack.popularity}/100</p>
             {selectedTrack.preview_url && (
               <audio controls src={selectedTrack.preview_url} />
