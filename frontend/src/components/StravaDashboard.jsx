@@ -14,6 +14,7 @@ const StravaDashboard = () => {
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [startTime, setStartTime] = useState(0);
   const [finishTime, setFinishTime] = useState(0)
+  const [date, setDate] = useState(0)
   const [activeTab, setActiveTab] = useState("stats");
 
   const accessToken = localStorage.getItem("strava_access_token");
@@ -36,8 +37,11 @@ const StravaDashboard = () => {
   const onClickActivity = (track) => {
     if (!track) return;
     setSelectedActivity(track);
+    console.log(track)
     const initialStartTime = track.start_date_local;
-    let time = initialStartTime.split("T")[1].slice(0,-1)
+    const time_date = initialStartTime.split("T")
+    let time = time_date[1].slice(0,-1)
+    setDate(time_date[0])
     const elapsed_mins = Math.round(track.elapsed_time / 60);
     const elapsed_secs = track.elapsed_time % 60
     const split_time = time.split(":")
@@ -146,7 +150,6 @@ const StravaDashboard = () => {
                 <div className="modal-overlay">
                   <div className="modal-content">
                     <button className="close-btn" onClick={closeModal}>X</button>
-                    <h2>{selectedActivity.name}</h2>
                     <div className="tab-buttons">
                       <button 
                         className={activeTab === "stats" ? "active" : ""} 
@@ -161,6 +164,8 @@ const StravaDashboard = () => {
                         Music
                       </button>
                     </div>
+                    <h2>{selectedActivity.name}</h2>
+                    <p><strong>Date: </strong>{date}</p>
                     {activeTab === "stats" && (
                       <><p><strong>Distance: </strong>{(selectedActivity.distance / 1000).toFixed(2)} km</p>
                         <p><strong>Moving time: </strong>{Math.round(selectedActivity.moving_time / 60)} min</p>
