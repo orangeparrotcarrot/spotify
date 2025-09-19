@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request, redirect
 import requests
-import base64
 from flask_cors import CORS
 import os
 from spotipy.oauth2 import SpotifyOAuth
